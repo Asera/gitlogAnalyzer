@@ -1,0 +1,10 @@
+{
+    "autoload": {
+      "psr-4": {"GitLogAnalyzer\\": "src/"}
+    },
+
+    "require": {
+      "symfony/console": "3.2.*",
+      "monolog/monolog": "1.22.*"
+    }
+}
