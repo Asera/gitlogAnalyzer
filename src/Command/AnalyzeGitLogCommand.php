@@ -2,7 +2,7 @@
 
 namespace GitLogAnalyzer\Command;
 
-use GitLogAnalyzer\Parser\GitLogStatisticsParser;
+use GitLogAnalyzer\Parser\HgLogStatisticsParser;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -23,7 +23,7 @@ class AnalyzeGitLogCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $output->writeln('Preparing statistics parser.');
-        $statisticsParser = new GitLogStatisticsParser();
+        $statisticsParser = new HgLogStatisticsParser();
         $gitLogInput = $input->getArgument('logfile');
 
         $output->writeln('Parsing git log file.');

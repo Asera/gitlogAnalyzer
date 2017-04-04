@@ -2,18 +2,18 @@
 
 namespace GitLogAnalyzer\Parser;
 
-use GitLogAnalyzer\Model\GitLogRecord;
+use GitLogAnalyzer\Model\LogRecord;
 
-class GitLogStatisticsParser
+class HgLogStatisticsParser
 {
     /**
      * @param string $file
-     * @return GitLogRecord[]
+     * @return LogRecord[]
      */
     public function parse($file) {
         $handler = fopen($file, 'r');
 
-        $logRecordParser = new GitLogRecordParser();
+        $logRecordParser = new HgLogRecordParser();
         $changesList = [];
         while(!feof($handler)) {
             $changesList[] = $logRecordParser->getRecordFromFile($handler);

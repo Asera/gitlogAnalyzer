@@ -2,7 +2,7 @@
 
 namespace GitLogAnalyzer\Model;
 
-class GitLogRecord
+class LogRecord
 {
     private $commitNumber;
     private $author;

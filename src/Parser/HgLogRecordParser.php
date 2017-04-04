@@ -2,19 +2,19 @@
 
 namespace GitLogAnalyzer\Parser;
 
-use GitLogAnalyzer\Model\GitLogRecord;
 use GitLogAnalyzer\Model\LineType;
+use GitLogAnalyzer\Model\LogRecord;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 
-class GitLogRecordParser
+class HgLogRecordParser
 {
     /**
      * @param resource $fileHandler
-     * @return GitLogRecord
+     * @return LogRecord
      */
     public function getRecordFromFile($fileHandler) {
-        $result = new GitLogRecord();
+        $result = new LogRecord();
 
         while (!feof($fileHandler)) {
             $line = fgets($fileHandler);
@@ -27,7 +27,7 @@ class GitLogRecordParser
         return $result;
     }
 
-    private function setDataToResult(GitLogRecord $result, $line) {
+    private function setDataToResult(LogRecord $result, $line) {
         $lineType = $this->getLineType($line);
         $rawLineData = $this->extractRawDataFromLine($line, $lineType);
 
@@ -87,7 +87,7 @@ class GitLogRecordParser
         return trim($result[1]);
     }
 
-    private function addLineDataToResultByLineType(GitLogRecord $result, $lineType, $lineData) {
+    private function addLineDataToResultByLineType(LogRecord $result, $lineType, $lineData) {
         switch ($lineType) {
             case LineType::LINE_TYPE_CHANGESET:
                 return $result->withHash($lineData);
