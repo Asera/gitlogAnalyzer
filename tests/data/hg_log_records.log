@@ -1,0 +1,5 @@
+changeset:   14:deadbeef
+tag:         test
+user:        The User <user@example.com>
+date:        Mon Mar 04 22:10:27 2017 +0200
+summary:     test file for LogRecordParser

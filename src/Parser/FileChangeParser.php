@@ -18,7 +18,7 @@ class FileChangeParser
 
     private function getTotalRowsChanged($line) {
         $totalRowsChangedRegex = '/.*\|\s+(\d*)/';
-        if (preg_match($totalRowsChangedRegex, $line, $result)) {
+        if (preg_match($totalRowsChangedRegex, $line, $result) && ($result[1] !== '')) {
             return $result[1];
         }
 
@@ -31,6 +31,4 @@ class FileChangeParser
 
         return trim($result[1]);
     }
-
-
 }

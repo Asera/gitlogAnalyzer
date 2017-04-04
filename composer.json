@@ -4,6 +4,7 @@
     },
 
     "require": {
+      "phpunit/phpunit": "6.*",
       "symfony/console": "3.2.*",
       "monolog/monolog": "1.22.*"
     }
