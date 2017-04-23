@@ -72,4 +72,8 @@ class LogRecord
         $result->removedLinesCount = $deletions;
         return $result;
     }
+
+    public function getAuthor() {
+        return $this->author;
+    }
 }

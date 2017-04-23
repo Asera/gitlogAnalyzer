@@ -3,6 +3,8 @@
 namespace GitLogAnalyzer\Command;
 
 use GitLogAnalyzer\Parser\HgLogStatisticsParser;
+use GitLogAnalyzer\Statistics\Calculator\AuthorsListCalculator;
+use GitLogAnalyzer\Statistics\Printer\AuthorsListStatisticsPrinter;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -28,9 +30,14 @@ class AnalyzeGitLogCommand extends Command
 
         $output->writeln('Parsing git log file.');
         $gitLogRecordsList = $statisticsParser->parse($gitLogInput);
+
         $output->writeln('Calculating statistics.');
+        $authorsListCalculator = new AuthorsListCalculator();
+        $authorsStatistics = $authorsListCalculator->calculateStatistics($gitLogRecordsList);
 
         $output->writeln('Formatting output.');
+        $authorsPrinter = new AuthorsListStatisticsPrinter($authorsStatistics);
+        $authorsPrinter->printAggregatedStatistics($output);
 
         $output->writeln('Yarrr!');
     }
