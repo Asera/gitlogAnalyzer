@@ -16,9 +16,16 @@ class HgLogStatisticsParser
         $logRecordParser = new HgLogRecordParser();
         $changesList = [];
         while(!feof($handler)) {
-            $changesList[] = $logRecordParser->getRecordFromFile($handler);
+            $record = $logRecordParser->getRecordFromFile($handler);
+            if ($this->isRecordFull($record)) {
+                $changesList[] = $record;
+            }
         }
 
         return $changesList;
+    }
+
+    private function isRecordFull(LogRecord $logRecord) {
+        return !is_null($logRecord->getAuthor());
     }
 }

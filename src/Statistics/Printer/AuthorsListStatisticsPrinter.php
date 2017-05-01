@@ -4,6 +4,7 @@ namespace GitLogAnalyzer\Statistics\Printer;
 
 use GitLogAnalyzer\Statistics\Model\AuthorsListStatistics;
 use GitLogAnalyzer\Statistics\OutputableStatisticsInterface;
+use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class AuthorsListStatisticsPrinter implements OutputableStatisticsInterface
@@ -18,8 +19,15 @@ class AuthorsListStatisticsPrinter implements OutputableStatisticsInterface
     }
 
     public function printAggregatedStatistics(OutputInterface $output) {
+        $table = new Table($output);
+        $table->setHeaders(['Name', 'Email']);
+
+        $rowCounter = 0;
         foreach ($this->authorsStatistics->getAuthorsList() as $author) {
-            $output->writeln($author);
+            $table->setRow($rowCounter, $author->toArray());
+            $rowCounter++;
         }
+
+        $table->render();
     }
 }

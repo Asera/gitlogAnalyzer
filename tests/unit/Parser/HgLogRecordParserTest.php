@@ -1,5 +1,7 @@
 <?php
 
+use GitLogAnalyzer\Model\Author;
+use GitLogAnalyzer\Model\FileChange;
 use GitLogAnalyzer\Model\LogRecord;
 use GitLogAnalyzer\Parser\HgLogRecordParser;
 use PHPUnit\Framework\TestCase;
@@ -12,7 +14,6 @@ class HgLogRecordParserTest extends TestCase
          * Will fix/rewrite it ASAP.
          */
         $fileHandler = fopen('tests/data/hg_log_records.log', 'r');
-
         $actual = $this->getActualLogRecord();
 
         $recordParser = new HgLogRecordParser();
@@ -22,12 +23,19 @@ class HgLogRecordParserTest extends TestCase
 
     private function getActualLogRecord() {
         $result = new LogRecord();
+        $author = new Author('The User', 'user@example.com');
+        $fileChange = new FileChange();
+        $change = $fileChange
+            ->withFileName('Test/Core/File.php')
+            ->withTotalRowsChanged(10);
 
         return $result
-            ->withAuthor('The User <user@example.com>')
+            ->withAuthor($author)
             ->withTime('Mon Mar 04 22:10:27 2017 +0200')
             ->withHash('14:deadbeef')
             ->withComment('test file for LogRecordParser')
-            ->withTag('test');
+            ->withTag('test')
+            ->withChangeList([$change])
+            ->withTotalStatistics(1, 5, 5);
     }
 }

@@ -11,6 +11,7 @@ class LineType
     const LINE_TYPE_SUMMARY = 'summary';
     const LINE_TYPE_FILE_CHANGE = 'file_change';
     const LINE_TYPE_TOTAL_STATISTICS = 'total_statistics';
+    const LINE_TYPE_EMPTY = 'empty_line';
 
     const LINE_TYPE_UNSUPPORTED = 'unsupported';
 }

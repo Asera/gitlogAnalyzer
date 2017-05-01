@@ -2,6 +2,7 @@
 
 namespace GitLogAnalyzer\Parser;
 
+use GitLogAnalyzer\Model\Author;
 use GitLogAnalyzer\Model\LineType;
 use GitLogAnalyzer\Model\LogRecord;
 use Monolog\Handler\StreamHandler;
@@ -18,7 +19,7 @@ class HgLogRecordParser
 
         while (!feof($fileHandler)) {
             $line = fgets($fileHandler);
-            if ($this->recordFullyParsedFromFile($line)) {
+            if ($this->recordFullyParsedFromFile($result)) {
                 return $result;
             }
             $result = $this->setDataToResult($result, $line);
@@ -34,11 +35,16 @@ class HgLogRecordParser
         return $this->addLineDataToResultByLineType($result, $lineType, $rawLineData);
     }
 
-    private function recordFullyParsedFromFile($line) {
-        return trim($line) == '';
+    private function recordFullyParsedFromFile(LogRecord $result) {
+        $changedList = $result->getChangedFilesCount();
+        return isset($changedList);
     }
 
     private function getLineType($line) {
+        if (trim($line) == '') {
+            return LineType::LINE_TYPE_EMPTY;
+        }
+
         $lineTypeRegex = '/(.*?):/';
 
         if (preg_match($lineTypeRegex, $line, $result)) {
@@ -71,6 +77,10 @@ class HgLogRecordParser
     }
 
     private function extractRawDataFromLine($line, $lineType) {
+        if ($lineType == LineType::LINE_TYPE_EMPTY) {
+            return '';
+        }
+
         if ($lineType == LineType::LINE_TYPE_FILE_CHANGE) {
             $fileChangeParser = new FileChangeParser();
             return $fileChangeParser->getFileChangeFromLine($line);
@@ -92,7 +102,8 @@ class HgLogRecordParser
             case LineType::LINE_TYPE_CHANGESET:
                 return $result->withHash($lineData);
             case LineType::LINE_TYPE_USER:
-                return $result->withAuthor($lineData);
+                $author = $this->extractAuthorFromLine($lineData);
+                return $result->withAuthor($author);
             case LineType::LINE_TYPE_DATE:
                 return $result->withTime($lineData);
             case LineType::LINE_TYPE_TAG:
@@ -111,5 +122,13 @@ class HgLogRecordParser
         }
 
         return $result;
+    }
+
+    private function extractAuthorFromLine($lineData) {
+        $authorDataRegexp = '/(?\'name\'[^<]*) ?<?(?\'email\'[^>]*)?>?/';
+        preg_match($authorDataRegexp, $lineData, $result);
+        $name = trim($result['name']);
+        $email = trim($result['email']);
+        return new Author($name, $email);
     }
 }

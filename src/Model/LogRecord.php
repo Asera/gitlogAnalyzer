@@ -5,13 +5,16 @@ namespace GitLogAnalyzer\Model;
 class LogRecord
 {
     private $commitNumber;
+    /**
+     * @var Author
+     */
     private $author;
     private $comment;
     private $changeList;
     private $time;
     private $hash;
     private $tag;
-    private $changedLinesCount;
+    private $changedFilesCount;
     private $addedLinesCount;
     private $removedLinesCount;
 
@@ -25,7 +28,7 @@ class LogRecord
         return $result;
     }
 
-    public function withAuthor($author) {
+    public function withAuthor(Author $author) {
         $result = clone $this;
         $result->author = $author;
         return $result;
@@ -65,15 +68,22 @@ class LogRecord
         return $result;
     }
 
-    public function withTotalStatistics($changed, $insertions, $deletions) {
+    public function withTotalStatistics(int $filesChanged, int $insertions, int $deletions) {
         $result = clone $this;
-        $result->changedLinesCount = $changed;
+        $result->changedFilesCount = $filesChanged;
         $result->addedLinesCount = $insertions;
         $result->removedLinesCount = $deletions;
         return $result;
     }
 
+    /**
+     * @return Author
+     */
     public function getAuthor() {
         return $this->author;
+    }
+
+    public function getChangedFilesCount() {
+        return $this->changedFilesCount;
     }
 }

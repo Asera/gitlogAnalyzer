@@ -14,6 +14,7 @@ class AuthorsListCalculator implements StatisticsCalculatorInterface
      */
     public function calculateStatistics(array $statistics) {
         $authors = new AuthorsListStatistics();
+        /** @var LogRecord $statisticRecord */
         foreach ($statistics as $statisticRecord) {
             $authors->addAuthorToList($statisticRecord->getAuthor());
         }

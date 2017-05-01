@@ -3,3 +3,6 @@ tag:         test
 user:        The User <user@example.com>
 date:        Mon Mar 04 22:10:27 2017 +0200
 summary:     test file for LogRecordParser
+
+ Test/Core/File.php |  10 +-
+ 1 files changed, 5 insertions(+), 5 deletions(-)
