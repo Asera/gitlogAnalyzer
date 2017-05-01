@@ -12,12 +12,18 @@ class AuthorsListStatistics
     private $authorsList = [];
 
     public function addAuthorToList(Author $author) {
-        if(!in_array($author, $this->authorsList)) {
-            $this->authorsList[] = $author;
+        if(!isset($this->authorsList[$author->getName()])) {
+            $this->authorsList[$author->getName()] = $author;
+        } else {
+            $this->addCommitToAuthor($author);
         }
     }
 
     public function getAuthorsList() {
         return $this->authorsList;
+    }
+
+    private function addCommitToAuthor(Author $author) {
+        $this->authorsList[$author->getName()]->increaseCommitsNumber();
     }
 }

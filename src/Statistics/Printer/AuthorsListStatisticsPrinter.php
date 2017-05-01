@@ -20,11 +20,16 @@ class AuthorsListStatisticsPrinter implements OutputableStatisticsInterface
 
     public function printAggregatedStatistics(OutputInterface $output) {
         $table = new Table($output);
-        $table->setHeaders(['Name', 'Email']);
+        $table->setHeaders(['Name', 'Email', 'Commits Total']);
 
         $rowCounter = 0;
         foreach ($this->authorsStatistics->getAuthorsList() as $author) {
-            $table->setRow($rowCounter, $author->toArray());
+            $row = [
+                $author->getName(),
+                $author->getEmail(),
+                $author->getCommitsNumber()
+            ];
+            $table->setRow($rowCounter, $row);
             $rowCounter++;
         }
 

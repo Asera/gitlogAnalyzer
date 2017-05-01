@@ -6,16 +6,27 @@ class Author
 {
     private $email;
     private $name;
+    private $commitsNumber;
 
-    public function __construct($name, $email = '') {
+    public function __construct($name, $email = '', $commitsNumber = 1) {
         $this->name = $name;
         $this->email = $email;
+        $this->commitsNumber = $commitsNumber;
     }
 
-    public function toArray() {
-        return [
-            'name' => $this->name,
-            'email' => $this->email
-        ];
+    public function getEmail() {
+        return $this->email;
+    }
+
+    public function getName() {
+        return $this->name;
+    }
+
+    public function getCommitsNumber() {
+        return $this->commitsNumber;
+    }
+
+    public function increaseCommitsNumber() {
+        $this->commitsNumber++;
     }
 }
