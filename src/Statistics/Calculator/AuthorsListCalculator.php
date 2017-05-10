@@ -7,18 +7,17 @@ use GitLogAnalyzer\Statistics\Model\AuthorsListStatistics;
 
 class AuthorsListCalculator implements StatisticsCalculatorInterface
 {
-
     /**
      * @param LogRecord[] $statistics
      * @return AuthorsListStatistics
      */
     public function calculateStatistics(array $statistics) {
-        $authors = new AuthorsListStatistics();
+        $authorsStatistics = new AuthorsListStatistics();
         /** @var LogRecord $statisticRecord */
         foreach ($statistics as $statisticRecord) {
-            $authors->addAuthorToList($statisticRecord->getAuthor());
+            $authorsStatistics->addCommitToAuthorsStatistics($statisticRecord);
         }
 
-        return $authors;
+        return $authorsStatistics;
     }
 }

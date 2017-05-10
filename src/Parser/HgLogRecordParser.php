@@ -2,7 +2,6 @@
 
 namespace GitLogAnalyzer\Parser;
 
-use GitLogAnalyzer\Model\Author;
 use GitLogAnalyzer\Model\LineType;
 use GitLogAnalyzer\Model\LogRecord;
 use Monolog\Handler\StreamHandler;
@@ -102,8 +101,11 @@ class HgLogRecordParser
             case LineType::LINE_TYPE_CHANGESET:
                 return $result->withHash($lineData);
             case LineType::LINE_TYPE_USER:
-                $author = $this->extractAuthorFromLine($lineData);
-                return $result->withAuthor($author);
+                $email = $this->extractAuthorEmailFromLine($lineData);
+                $name = $this->extractAuthorNameFromLine($lineData);
+                return $result
+                    ->withAuthorName($name)
+                    ->withAuthorEmail($email);
             case LineType::LINE_TYPE_DATE:
                 return $result->withTime($lineData);
             case LineType::LINE_TYPE_TAG:
@@ -124,11 +126,17 @@ class HgLogRecordParser
         return $result;
     }
 
-    private function extractAuthorFromLine($lineData) {
-        $authorDataRegexp = '/(?\'name\'[^<]*) ?<?(?\'email\'[^>]*)?>?/';
-        preg_match($authorDataRegexp, $lineData, $result);
-        $name = trim($result['name']);
+    private function extractAuthorEmailFromLine(string $lineData): string {
+        $authorEmailRegexp = '/[^<]* ?<?(?\'email\'[^>]*)?>?/';
+        preg_match($authorEmailRegexp, $lineData, $result);
         $email = trim($result['email']);
-        return new Author($name, $email);
+        return $email;
+    }
+
+    private function extractAuthorNameFromLine(string $lineData): string {
+        $authorNameRegexp = '/(?\'name\'[^<]*) ?<?[^>]*?>?/';
+        preg_match($authorNameRegexp, $lineData, $result);
+        $name = trim($result['name']);
+        return $name;
     }
 }

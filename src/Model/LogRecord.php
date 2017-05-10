@@ -5,12 +5,14 @@ namespace GitLogAnalyzer\Model;
 class LogRecord
 {
     private $commitNumber;
-    /**
-     * @var Author
-     */
-    private $author;
+    private $authorName;
+    private $authorEmail;
     private $comment;
     private $changeList;
+
+    /**
+     * @var \DateTime
+     */
     private $time;
     private $hash;
     private $tag;
@@ -34,6 +36,18 @@ class LogRecord
         return $result;
     }
 
+    public function withAuthorName(string $authorName): LogRecord {
+        $result = clone $this;
+        $result->authorName = $authorName;
+        return $result;
+    }
+
+    public function withAuthorEmail(string $authorEmail): LogRecord {
+        $result = clone $this;
+        $result->authorEmail = $authorEmail;
+        return $result;
+    }
+
     public function withComment($comment) {
         $result = clone $this;
         $result->comment = $comment;
@@ -50,9 +64,9 @@ class LogRecord
         $this->changeList[] = $change;
     }
 
-    public function withTime($time) {
+    public function withTime(string $time): LogRecord {
         $result = clone $this;
-        $result->time = $time;
+        $result->time = new \DateTime($time);
         return $result;
     }
 
@@ -77,13 +91,25 @@ class LogRecord
     }
 
     /**
-     * @return Author
+     * @return string|null
      */
-    public function getAuthor() {
-        return $this->author;
+    public function getAuthorName() {
+        return $this->authorName;
+    }
+
+    public function getAuthorEmail(): string {
+        return $this->authorEmail;
     }
 
     public function getChangedFilesCount() {
         return $this->changedFilesCount;
+    }
+
+    public function getChangeDate(): \DateTime {
+        return $this->time;
+    }
+
+    public function getHash(): string {
+        return $this->hash;
     }
 }

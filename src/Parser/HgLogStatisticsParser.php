@@ -25,7 +25,7 @@ class HgLogStatisticsParser
         return $changesList;
     }
 
-    private function isRecordFull(LogRecord $logRecord) {
-        return !is_null($logRecord->getAuthor());
+    private function isRecordFull(LogRecord $logRecord): bool {
+        return !is_null($logRecord->getAuthorName());
     }
 }
