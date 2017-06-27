@@ -112,4 +112,16 @@ class LogRecord
     public function getHash(): string {
         return $this->hash;
     }
+
+    public function getRemovedLines(): int {
+        return $this->removedLinesCount;
+    }
+
+    public function getAddedLines(): int {
+        return $this->addedLinesCount;
+    }
+
+    public function getTotalLinesChanged(): int {
+        return $this->addedLinesCount + $this->removedLinesCount;
+    }
 }

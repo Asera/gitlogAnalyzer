@@ -4,7 +4,11 @@ namespace GitLogAnalyzer\Command;
 
 use GitLogAnalyzer\Parser\HgLogStatisticsParser;
 use GitLogAnalyzer\Statistics\Calculator\AuthorsListCalculator;
+use GitLogAnalyzer\Statistics\Calculator\CommitsByHourStatisticsCalculator;
+use GitLogAnalyzer\Statistics\Calculator\CommitsDateStatisticsCalculator;
 use GitLogAnalyzer\Statistics\Printer\AuthorsListStatisticsPrinter;
+use GitLogAnalyzer\Statistics\Printer\CommitsByDateStatisticsPrinter;
+use GitLogAnalyzer\Statistics\Printer\CommitsByHourStatisticsPrinter;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -35,9 +39,21 @@ class AnalyzeGitLogCommand extends Command
         $authorsListCalculator = new AuthorsListCalculator();
         $authorsStatistics = $authorsListCalculator->calculateStatistics($gitLogRecordsList);
 
+        $commitsByDateCalculator = new CommitsDateStatisticsCalculator();
+        $commitsByDateList = $commitsByDateCalculator->calculateStatistics($gitLogRecordsList);
+
+        $commitsByHoursCalculator = new CommitsByHourStatisticsCalculator();
+        $commitsByHours = $commitsByHoursCalculator->calculateStatistics($gitLogRecordsList);
+
         $output->writeln('Formatting output.');
         $authorsPrinter = new AuthorsListStatisticsPrinter($authorsStatistics);
         $authorsPrinter->printAggregatedStatistics($output);
+
+        $commitsByDatePrinter = new CommitsByDateStatisticsPrinter($commitsByDateList);
+        $commitsByDatePrinter->printAggregatedStatistics($output);
+
+        $commitsByHoursStatistics = new CommitsByHourStatisticsPrinter($commitsByHours);
+        $commitsByHoursStatistics->printAggregatedStatistics($output);
 
         $output->writeln('Yarrr!');
     }
