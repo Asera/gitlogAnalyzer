@@ -10,8 +10,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class AnalyzeGitLogCommand extends Command
 {
-    protected function configure()
-    {
+    protected function configure() {
         $this->setName('analyze-log')
             ->addArgument(
                 'logfile',
@@ -20,8 +19,7 @@ class AnalyzeGitLogCommand extends Command
             );
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
-    {
+    protected function execute(InputInterface $input, OutputInterface $output) {
         $output->writeln('Preparing statistics parser.');
         $statisticsParser = new HgLogStatisticsParser();
         $gitLogInput = $input->getArgument('logfile');
